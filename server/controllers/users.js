@@ -1,7 +1,6 @@
 const User = require('../db/models/user');
-const { sendWelcomeEmail } = require('../emails');
 cloudinary = require('cloudinary').v2,
-{ sendWelcomeEmail } = require('../../emails/index'),
+{ sendWelcomeEmail } = require('../emails/'),
 jwt = require('jsonwebtoken');
 
 exports.createUser = async (req, res) => {
