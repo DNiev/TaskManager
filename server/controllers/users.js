@@ -1,11 +1,15 @@
-const User = require('../db/models/user')
+const User = require('../db/models/user');
+const { sendWelcomeEmail } = require('../emails');
 cloudinary = require('cloudinary').v2,
+{ sendWelcomeEmail } = require('../../emails/index'),
 jwt = require('jsonwebtoken');
 
 exports.createUser = async (req, res) => {
     const {name, email, password} = req.body;
     try{
         const user = new User({name, email, password});
+        await user.save()
+        sendWelcomeEmail(user.email, user.name);
         const token = user.generateAuthToken()
         res.cookie('jwt', token, {
             httpOnly: true,

@@ -75,18 +75,17 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await user.findOne({email});
+    const user = await User.findOne({email});
     if (!user) throw new Error('Unable to log in.');
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error ('Unable to login.');
+    if (!isMatch) throw new Error ('Invalid password, try again.');
     return user;
 };
 
 userSchema.pre('save', async function (next) {
     const user = this;
     if (user.isModified('password'))
-    user.password = await bcrypt.hash(user.password, 8)
-
+        user.password = await bcrypt.hash(user.password, 8)
     next();
 });
 const User = mongoose.model('User', userSchema);
